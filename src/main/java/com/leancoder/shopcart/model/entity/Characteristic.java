@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Table(name = "charateristics")
+@Table(name = "characteristics")
 @Entity
 public class Characteristic {
     
@@ -22,8 +22,8 @@ public class Characteristic {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "charateristic")
-    private List<CharacteristicValue> charateristicValues;
+    @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CharacteristicValue> characteristicValues;
 
     public Long getId() {
         return id;
@@ -50,11 +50,11 @@ public class Characteristic {
     }
 
     public List<CharacteristicValue> getCharateristicValue() {
-        return charateristicValues;
+        return characteristicValues;
     }
 
     public void setCharateristicValue(CharacteristicValue charateristicValue) {
-        this.charateristicValues.add(charateristicValue);
+        this.characteristicValues.add(charateristicValue);
     }
 
     

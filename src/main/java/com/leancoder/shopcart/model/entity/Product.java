@@ -49,6 +49,9 @@ public class Product {
     @JoinColumn(name = "productType_id", nullable = true, referencedColumnName="id")
     private ProductType productType;
 
+    /* @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
+    private List<ProductCharacteristicValues> productCharacteristicValues; */
+
     public Long getId() {
         return id;
     }
@@ -68,6 +71,14 @@ public class Product {
     public Double getPrice() {
         return price;
     }
+
+    /* public List<ProductCharacteristicValues> getProductCharacteristicValues() {
+        return productCharacteristicValues;
+    }
+
+    public void setProductCharacteristicValues(ProductCharacteristicValues productCharacteristicValue) {
+        this.productCharacteristicValues.add(productCharacteristicValue);
+    } */
 
     public void setPrice(Double price) {
         this.price = price;
@@ -119,6 +130,13 @@ public class Product {
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
+    }
+
+    public Boolean productHasNotComments() {
+        if (this.comments == null) {
+            return true;
+        }
+        return false;
     }
 
 }
