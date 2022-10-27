@@ -1,6 +1,7 @@
 package com.leancoder.shopcart.model.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,7 +19,7 @@ import javax.validation.constraints.Min;
 @Table(name = "productTypes")
 @Entity
 public class ProductType {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,11 +28,11 @@ public class ProductType {
     @Max(value = 80)
     private String type;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "productType")
-    private List<Product> products;
+    @ManyToMany(mappedBy = "productTypes")
+    private Set<Product> products;
 
     @ManyToOne(targetEntity = SubCategory.class)
-    @JoinColumn(name = "subcategory_id", nullable = true, referencedColumnName="id")
+    @JoinColumn(name = "subcategory_id", nullable = true, referencedColumnName = "id")
     private SubCategory subcategory;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "productType")
@@ -52,7 +54,7 @@ public class ProductType {
         this.type = type;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 

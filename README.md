@@ -8,9 +8,20 @@ Tambien servira para poder en practica un diseño de base de datos para un siste
 
 - Revisar mi google keep con los pendientes de la aplicacion.
 - Documentar todo lo avanzado en el shop cart
-- crear una lista de items por subcategoria y tipo de producto, todo con sus respectivos atributos que permiten filtrar los productos(MANTENER ESTADO SI ACTIVAMOS ALGUN FILTRO)
-- analizar si es necesario incluir la tabla de relacion no identificada, para obtener los productos por las categorias de filtrado
-- crear logica de carro de compras como invitado y que se guarde en las cookies con tiempo limite
+
+### Con react:
+- crear diseño para menu y lista de productos
 - que las categorias solo muestren a las subcategorias en un menu desplegable, mas no cargen productos por solo si mismo
-- TODO: Filtrar productos repetidos(FILTRARLOS POR EL ID).
-- TODO: O en todo caso, hacer un query que traiga los productos en funcion a la subcategoria.
+- crear logica de carro de compras como invitado y que se guarde en las cookies con tiempo limite
+
+
+- atributos que permiten filtrar los productos(MANTENER ESTADO SI ACTIVAMOS ALGUN FILTRO)
+- el rating se hace una relacionde uno a muchos, con relacion desde producto a muchos product_ratings y de usuario a muchos product_ratings
+
+- Investigar sobre diseño que me facilite un mapa de filtros para la lista de productos.
+- TODO: Crear map con su tipo de caracteristica + todas las caracteristicas disponibles por esa caracteristica.
+- Documentar lo demas del proyecto.
+
+
+
+

@@ -1,6 +1,7 @@
 package com.leancoder.shopcart.model.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,6 +29,9 @@ public class CharacteristicValue {
     @ManyToOne(targetEntity = Characteristic.class)
     @JoinColumn(name = "characteristic_id", nullable = true, referencedColumnName="id")
     private Characteristic characteristic;
+
+    @ManyToMany(mappedBy = "characteristicValues")
+    private Set<Product> products;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "characteristicValue")
     private List<ProductTypeCharacteristicValue> ProductTypeCharacteristicValues;
@@ -49,6 +54,14 @@ public class CharacteristicValue {
 
     public String getDescriptionValue() {
         return descriptionValue;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Product product) {
+        this.products.add(product);
     }
 
     public void setDescriptionValue(String descriptionValue) {
