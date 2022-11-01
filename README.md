@@ -6,6 +6,7 @@ Tambien servira para poder en practica un diseño de base de datos para un siste
 
 ## Pendientes:
 - Documentar todo lo avanzado en el shop cart
+- Investigar como evitar tener que cargar todos los productos obtenidos para poder cargar todas los tipos de caracteristicas de esos productos, con sus respectivas caracteristicas.
 
 ### Con react:
 - crear diseño para menu y lista de productos
