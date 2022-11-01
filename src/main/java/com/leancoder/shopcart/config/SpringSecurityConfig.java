@@ -12,6 +12,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // Por el momento se permite usar la pagina a cualquiera, sin tener que registrarse.
         http.authorizeRequests().antMatchers("/chocloshop/**").permitAll();
     }
     

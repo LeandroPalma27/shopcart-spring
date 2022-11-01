@@ -5,8 +5,6 @@ Este proyecto tiene como base entender el funcionamiento de un carro de compras 
 Tambien servira para poder en practica un diseño de base de datos para un sistema que busca filtrar items por caracteristicas como el color, el tamaño, garantia, etc. Todo con la finalidad de crear una funcionaliad de filtrado totalmente escalable y responsiva para cualquier tipo o subcategoria de producto.
 
 ## Pendientes:
-
-- Revisar mi google keep con los pendientes de la aplicacion.
 - Documentar todo lo avanzado en el shop cart
 
 ### Con react:
@@ -18,10 +16,8 @@ Tambien servira para poder en practica un diseño de base de datos para un siste
 - atributos que permiten filtrar los productos(MANTENER ESTADO SI ACTIVAMOS ALGUN FILTRO)
 - el rating se hace una relacionde uno a muchos, con relacion desde producto a muchos product_ratings y de usuario a muchos product_ratings
 
-- Investigar sobre diseño que me facilite un mapa de filtros para la lista de productos.
+- Investigar sobre diseño que me facilite un mapa de filtros para la lista de productos(ES RECOMENDABLE NO USAR EL NUMERO DE PRODUCTOS POR EL MOMENTO).
 - TODO: Crear map con su tipo de caracteristica + todas las caracteristicas disponibles por esa caracteristica.
-- Documentar lo demas del proyecto.
-
 
 
 

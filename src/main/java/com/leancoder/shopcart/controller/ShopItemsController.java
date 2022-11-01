@@ -1,11 +1,14 @@
 package com.leancoder.shopcart.controller;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -89,8 +92,10 @@ public class ShopItemsController {
     @GetMapping("/{category}/{subcategory}")
     public String ItemsBySubCategory(@PathVariable(required = true, name = "category") String category,
             @PathVariable(required = true, name = "subcategory") String subcategory, Model model) {
+        // Generamos un excepcion HTTP de tipo 404, en caso de no encontrar la categoria:
         categoryDao.findByName(category)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado."));
+        // Y si la cateogria se encuentra, se procede a buscar la subcategoria. Si no se encuentra tambien generamos una excepcion HTTP 404:    
         subCategoryDao.findByName(subcategory)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado."));
         return "redirect:/items/".concat(category + "/").concat(subcategory + "/ver-todo-").concat(subcategory);
@@ -111,7 +116,7 @@ public class ShopItemsController {
      * Un parametro para una rango de precio(PARAMETRO DE FILTRO ESPECIAL 1).
      * Un parametro para ordenar los productos que se van a listar EN FUNCION A RELEVANCIA, MENOR PRECIO, MAYOR PRECIO, ETC(parametros de filtro ESPECIAL 2).
      */
-    public String ItemsByProductType(@RequestParam(name = "page", defaultValue = "0") int page,
+    public String ItemsByProductType(@RequestParam Map<String, Object> params, @RequestParam(name = "page", defaultValue = "0") int page,
             @PathVariable(required = true, name = "category") String category,
             @PathVariable(required = true, name = "subcategory") String subcategory,
             @PathVariable(required = true, name = "productType") String productType, Model model) {
@@ -122,13 +127,14 @@ public class ShopItemsController {
         productTypeDao.findByType(productType)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado"));
 
-        // Simulacion de filtros(SE DEBEN OBTENER DESDE EL PATH REQUEST, USANDO UNA REGEX(expresion regular)):
-        String filtro1 = "Color:negro";
-        String filtro2 = "Color:rojo";
-        String filtro3 = "Marca:HP";
-        String procedFilter1 = String.join("-", Arrays.asList(filtro1.split(":")));
-        String procedFilter2 = String.join("-", Arrays.asList(filtro2.split(":")));
-        String procedFilter3 = String.join("-", Arrays.asList(filtro3.split(":")));
+
+        List<String> procedFilters = new ArrayList<String>();
+        params.keySet().iterator().forEachRemaining(param -> {
+            if (param.matches("filter[0-20]")){
+                procedFilters.add(String.join("-", Arrays.asList(params.get(param).toString().split(":"))));
+            }
+        });
+
         
         // Creacion de query que liste productos(PAGINADOS Y NO PAGINADOS):
         // Recibe:
@@ -136,7 +142,10 @@ public class ShopItemsController {
          * Un array con todos los filtros NORMALES detectados.
          * El tipo de productos que en el que estamos.
          */
-        var readyQuery = generatedFilterQuery(Arrays.asList(procedFilter1, procedFilter2), productType);
+        var readyQuery = generatedFilterQuery(procedFilters, productType);
+        System.out.println(readyQuery);
+
+
         // Consulta desde el dao de productos con EntityManager, para listar los productos con o sin filtros, y su respectiva paginacion:
         // Recibe:
         /*
@@ -144,16 +153,6 @@ public class ShopItemsController {
          * El query final para consultar en la base de datos.
          */
         var productItems = productoEntityManager.findProductsWithCharacteristics(PageRequest.of(page, 5), readyQuery);
-        
-        /* Map<String, ArrayList<CharacteristicValue>> mapaDeFiltros = new HashMap<>();
-        mapaDeFiltros.put(productItems.get("dataNotPaged").get(0).getCharacteristicValues().iterator().next().getCharacteristic().getName(), new ArrayList<CharacteristicValue>(productItems.get("dataNotPaged").get(0).getCharacteristicValues()));
-        System.out.println(mapaDeFiltros.keySet().iterator().next());
-        mapaDeFiltros.get(mapaDeFiltros.keySet().iterator().next()).iterator().forEachRemaining(caracteristica -> {
-            System.out.println(caracteristica.getValue());
-        }); */
-        productItems.get("dataNotPaged").forEach(producto -> {
-            System.out.println(producto.getTitle());
-        });
 
         model.addAttribute("items", productItems.get("dataPaged"));
         return "items/list";
