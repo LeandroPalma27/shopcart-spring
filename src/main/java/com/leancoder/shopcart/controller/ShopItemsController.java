@@ -117,6 +117,7 @@ public class ShopItemsController {
      * Un parametro para ordenar los productos que se van a listar EN FUNCION A RELEVANCIA, MENOR PRECIO, MAYOR PRECIO, ETC(parametros de filtro ESPECIAL 2).
      */
     public String ItemsByProductType(@RequestParam Map<String, Object> params, @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0", name = "order") int order,
             @PathVariable(required = true, name = "category") String category,
             @PathVariable(required = true, name = "subcategory") String subcategory,
             @PathVariable(required = true, name = "productType") String productType, Model model) {
@@ -135,7 +136,6 @@ public class ShopItemsController {
             }
         });
 
-        
         // Creacion de query que liste productos(PAGINADOS Y NO PAGINADOS):
         // Recibe:
         /*
@@ -143,6 +143,25 @@ public class ShopItemsController {
          * El tipo de productos que en el que estamos.
          */
         var readyQuery = generatedFilterQuery(procedFilters, productType);
+
+        switch (order) {
+            case 0: 
+                readyQuery.concat("");
+                break;
+        
+            case 1:
+                readyQuery.concat("");
+                break;
+
+            case 2:
+                readyQuery.concat("");
+                break;
+
+            default:
+                break;
+        }
+
+        System.out.println("Tipo de orden de producto: " + order);
         System.out.println(readyQuery);
 
 
@@ -172,16 +191,17 @@ public class ShopItemsController {
         /*
          * Primera parte del query(preQuery1): Campos a mostrar y seleccion de la tabla de productos.
          * Segunda parte del query(preQuery2): Union con los tipos de productos, para asi poder seleccionar solo a los productos que pertenezcan a un tipo de producto.
-         * Tercera parte del query(preQuery2): Parte final, donde se incluye a el campo de la tabla de tipos de productos con el que incluiremos la condicion del tipo de productos que estamos buscando.
+         * Tercera parte del query(preQuery3): Parte final, donde se incluye a el campo de la tabla de tipos de productos con el que incluiremos la condicion del tipo de productos que estamos buscando.
          */
         String preQuery1 = "SELECT productos.id, productos.code, productos.description, productos.price, productos.rating, productos.stock, productos.title FROM productos";
         String preQuery2 = " left outer join product_types_asigned on productos.id = product_types_asigned.product_id left outer join product_types on product_types_asigned.product_type_id = product_types.id where";
-        String preQuery4 = "and product_types.type = '";
+        String preQuery3 = "and product_types.type = '";
+        String preQuery4 = " GROUP BY productos.id";
 
         // PARTE 2:
         /*
-         * Primer obj: Se usa para generar un identificador de union de tabla para la tabla characteristic_values_asigned(SE GENERAN EN FUNCION A LA CANTIDAD DE CARACTERISTICAS).
-         * Segundo obj: Se usa para generar un identificador de union de tabla para la tabla characteristic_values(SE GENERAN EN FUNCION A LA CANTIDAD DE CARACTERISTICAS).
+         * objCVA: Se usa para generar un identificador de union de tabla para la tabla characteristic_values_asigned(SE GENERAN EN FUNCION A LA CANTIDAD DE CARACTERISTICAS).
+         * objCV: Se usa para generar un identificador de union de tabla para la tabla characteristic_values(SE GENERAN EN FUNCION A LA CANTIDAD DE CARACTERISTICAS).
          */
         String objCVA = "cva";
         String objCV = "cv";
@@ -203,7 +223,7 @@ public class ShopItemsController {
         if (procedFilters.isEmpty()) {
             // Retornamos el query sin ningun filtro:
             String noFilterQuery = "SELECT productos.id, productos.code, productos.description, productos.price, productos.rating, productos.stock, productos.title FROM productos left outer join product_types_asigned on productos.id = product_types_asigned.product_id left outer join product_types on product_types_asigned.product_type_id = product_types.id where product_types.type = '"
-                .concat(productType + "'");
+                .concat(productType + "'".concat(preQuery4));
             return noFilterQuery;
         }
 
@@ -258,7 +278,7 @@ public class ShopItemsController {
             if (acum < procedFilters.size() - 1) {
                 // CASO 1:
                 /*
-                 * Generamos un query con un and al final (YA QUE AUN FALTAN ITERAR MAS CARACTERISTICAS).
+                    * Generamos un query con un and al final (YA QUE AUN FALTAN ITERAR MAS CARACTERISTICAS).
                  */
                 var query = " ".concat(
                         objCV + String.valueOf(cont) + ".description_value = '" + procedFilters.get(i) + "' and");
@@ -266,19 +286,21 @@ public class ShopItemsController {
                 queries.add(query);
                 // Aumentamos la iteracion(SIGUENTE CARACTERISTICA):
                 acum++;
-            } else {
-                // CASO 2:
-                /*
-                 * Generamos un query que cierre la cantidad de condiciones que hayan, en funcion a la cantidad de caracteristicas.
-                 */
-                var query = " "
-                        .concat(objCV + String.valueOf(cont) + ".description_value = '" + procedFilters.get(i) + "'");
-                // Añadimos esa ultima parte al list final del query:
-                queries.add(query);
+                continue;
             }
+            // CASO 2:
+            /*
+                * Generamos un query que cierre la cantidad de condiciones que hayan, en funcion a la cantidad de caracteristicas.
+            */
+            var query = " "
+                    .concat(objCV + String.valueOf(cont) + ".description_value = '" + procedFilters.get(i) + "'");
+            // Añadimos esa ultima parte al list final del query:
+            queries.add(query);
+            
         }
         // Al final de todo, añadimos la ultima parte del query final(LA PARTE QUE EVALUA LA CONDICION PARA EL TIPO DE PRODUCTOS QUE BUSCAMOS):
-        queries.add(preQuery4.concat(productType + "'"));
+        queries.add(preQuery3.concat(productType + "'"));
+        queries.add(preQuery4);
         // Retornamos un join del list(UN STRING):
         return String.join("", queries);
     }
