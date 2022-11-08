@@ -129,8 +129,12 @@ public class ShopItemsController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado"));
 
 
+        // LECTURA DE PARAMETROS QUE RECIBEN LOS FILTROS(filter0, filter1, filter2, ..., filtern)
+        // Creamos un list vacio para que almacene todos los filtros que se cargaron a traves del parametro get filter[n]
         List<String> procedFilters = new ArrayList<String>();
+        // Iteramos el map de parametros GET que se cargan en la url de este endpoint del controlador(CONVERTIMOS EL MAP EN UN SET de llaves E ITERAMOS):
         params.keySet().iterator().forEachRemaining(param -> {
+            // Si la llave en cuestion coincide con la expresion regular correspondiente, añadimos el valor que marca esa llave del map de parametros GET en el array vacio creado al inicio.
             if (param.matches("filter[0-20]")){
                 procedFilters.add(String.join("-", Arrays.asList(params.get(param).toString().split(":"))));
             }
@@ -144,19 +148,24 @@ public class ShopItemsController {
          */
         var readyQuery = generatedFilterQuery(procedFilters, productType);
 
+        // Lectura del parametro que ordena lo productos en funcion a un codigo numerico:
         switch (order) {
+            // Si es 0
             case 0: 
                 readyQuery.concat("");
                 break;
         
+            // Si es 1
             case 1:
                 readyQuery.concat("");
                 break;
 
+            // Si es 2
             case 2:
                 readyQuery.concat("");
                 break;
 
+            // Si es cualquier numero que no sea 0, 1 o 2
             default:
                 break;
         }
