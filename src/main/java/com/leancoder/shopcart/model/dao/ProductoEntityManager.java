@@ -17,63 +17,32 @@ import org.springframework.stereotype.Repository;
 
 import com.leancoder.shopcart.model.entity.Product;
 
+// Repository de la entidad de productos(CON ENTITY MANAGER)
 @Repository
 public class ProductoEntityManager {
 
     @PersistenceContext
     EntityManager entityManager;
 
-    // TODO: Documentar metodo EntityManager que busca los productos con la query final(QUE PUEDE O NO TENER FILTROS NORMALES, ESPECIAL 1 O ESPECIAL 2).
-    public Map<String, List<Product>> findProductsWithCharacteristics(PageRequest pageRequest, String readyQuery) {
-
-        //List<Product> productos = new ArrayList<Product>();
-        /* for (var readyQuery : readyQueries) {
-            //System.out.println(readyQuery);
-            Query query = entityManager.createNativeQuery(readyQuery, Product.class);
-            int pageNumber = pageRequest.getPageNumber();
-            int pageSize = pageRequest.getPageSize();
-            query.setFirstResult((pageNumber) * pageSize);
-            query.setMaxResults(pageSize);
-            productos.addAll(query.getResultList());
-        } */
+    // Este metodo se encarga de buscar los productos, recibiendo un sql query funcional para la consulta de productos en la base de datos. 
+    // Tambien se recibe el pageRequest que se encarga de manejar el paginado.
+    // SE RETORA UN MAP CON UNA LISTA DE TODOS LOS PRODUCTOS ENCONTRADOS Y OTRA SOLO CON UNA PARTE DE ELLOS, YA QUE ESTAN PAGINADOS.
+    public Map<String, List<Product>> findProductsComplex(PageRequest pageRequest, String readyQuery) {
         Map<String, List<Product>> data = new HashMap<String, List<Product>>();
         Query query = entityManager.createNativeQuery(readyQuery,
         Product.class);
+        // Cargamos todos los productos encontrados sin la paginacion:
         data.put("dataNotPaged", query.getResultList());
+
+        // Codigo encargado del paginado:
         int pageNumber = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
         query.setFirstResult((pageNumber) * pageSize);
         query.setMaxResults(pageSize);
+
+        // Cargamos todos los productos encontrados pero con la paginacion inlcuida:
         List<Product> productos = query.getResultList();
         data.put("dataPaged", productos);
         return data;
-
-       /*  if (readyQueries.size() > 1) {
-            List<Product> productosFiltrados = new ArrayList<>();
-            List<Product> productosFiltrados2 = new ArrayList<>();
-            for (var producto : productos) {
-                if (!productosFiltrados.contains(producto)) {
-                    productosFiltrados.add(producto);
-                } else {
-                    productosFiltrados2.add(producto);
-                    continue;
-                }
-            }
-            return ultimoFiltro(productosFiltrados2);
-        }
-        return productos;
-        
-    }
-
-    public List<Product> ultimoFiltro(List<Product> productos) {
-        List<Product> productosFiltrados = new ArrayList<>();
-        for (var producto : productos) {
-            if (!productosFiltrados.contains(producto)) {
-                productosFiltrados.add(producto);
-            } else {
-                continue;
-            }
-        }
-        return productosFiltrados; */
     }
 }

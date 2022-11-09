@@ -180,7 +180,7 @@ public class ShopItemsController {
          * El pageRequest con la cantidad maxima de items por pagina
          * El query final para consultar en la base de datos.
          */
-        var productItems = productoEntityManager.findProductsWithCharacteristics(PageRequest.of(page, 5), readyQuery);
+        var productItems = productoEntityManager.findProductsComplex(PageRequest.of(page, 5), readyQuery);
 
         model.addAttribute("items", productItems.get("dataPaged"));
         return "items/list";
@@ -200,7 +200,8 @@ public class ShopItemsController {
         /*
          * Primera parte del query(preQuery1): Campos a mostrar y seleccion de la tabla de productos.
          * Segunda parte del query(preQuery2): Union con los tipos de productos, para asi poder seleccionar solo a los productos que pertenezcan a un tipo de producto.
-         * Tercera parte del query(preQuery3): Parte final, donde se incluye a el campo de la tabla de tipos de productos con el que incluiremos la condicion del tipo de productos que estamos buscando.
+         * Tercera parte del query(preQuery3): Parte donde se incluye el campo de la tabla de tipos de productos con el que incluiremos la condicion del tipo de productos que estamos buscando.
+         * Cuarta parte del query(preQuery4): Parte donde se incluye el GROUP BY por el id del producto, con al finalidad de evitar repetidos.
          */
         String preQuery1 = "SELECT productos.id, productos.code, productos.description, productos.price, productos.rating, productos.stock, productos.title FROM productos";
         String preQuery2 = " left outer join product_types_asigned on productos.id = product_types_asigned.product_id left outer join product_types on product_types_asigned.product_type_id = product_types.id where";
