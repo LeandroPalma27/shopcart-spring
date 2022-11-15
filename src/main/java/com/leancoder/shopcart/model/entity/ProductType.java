@@ -16,6 +16,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+// Entidad para los productTypes(TIPOS DE PRODUCTO)
+
+/*
+ * Sera el tercer y ultimo nivel de cada producto.
+ * Esta entidad tiene una relacion de muchos a muchos con los productos(UN PRODUCTO PUEDE SER PARTE DE LAPTOPS Y LAPTOPS GAMER).
+ * Esta entidad tiene una relacion de muchos a uno con la subcategoria.
+ * Tendra otra relacion de uno a muchos con la entidad productTypeCharacteristicValue(PARA LA CONSULTA DE TODAS LAS CARACTERISTICAS DISPONIBLES POR EL TIPO DE PRODUCTO, CON SU RESPECTIVO VALOR).
+ * Solo tendra como campos el id, nombre deL tipo de producto y el id de la subcategoria.
+*/
 @Table(name = "productTypes")
 @Entity
 public class ProductType {

@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+// Entidad para los tipos de caracteristicas(COLOR, TAMAÑO, PESO, ETC)
+// Esta entidad tiene una relacion de uno a muchos con la entidad "charactristicValues(EJEMPLOS DE TIPO DE CARACTERISTICA)".
+// Sus campos serian el id, el nombre del tipo(COLOR, tamaño, conectividad, gamer), y la descripcion de estos tipos.
+
 @Table(name = "characteristics")
 @Entity
 public class Characteristic {

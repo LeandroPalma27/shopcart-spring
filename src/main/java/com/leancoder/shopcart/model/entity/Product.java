@@ -18,6 +18,16 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+// Entidad para los productos
+
+/*
+ * Esta tabla almacenara absolutamente todos los productos existentes en el sistema, sin importar el tipo, categoria o subcategoria.
+ * Esta entidad tiene una relacion de muchos a muchos con la entidad "productType"(TIPOS DE PRODUCTO).
+ * Esta entidad tiene una relacion de muchos a muchos con la entidad "characteristicValue"(ejemplos de cada tipo de caracteristica).
+ * La finalidad de la relacion con characteristicValue es el poder obtener todos los tipos de caracteristicas con sus respectivos ejemplos, 
+   pero desde cada producto o lista de productos que tengamos en alguna parte de la aplicacion.
+ * Solo tendra como campos el id, titulo del producto, cantidad(STOCK), precio, codigo, descripcion, rating.
+*/
 @Entity
 @Table(name = "productos")
 public class Product {
@@ -54,9 +64,6 @@ public class Product {
     @ManyToMany
     @JoinTable(name = "characteristicValues_asigned", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "characteristicValue_id"))
     private Set<CharacteristicValue> characteristicValues;
-
-    /* @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
-    private List<ProductCharacteristicValues> productCharacteristicValues; */
 
     public Long getId() {
         return id;

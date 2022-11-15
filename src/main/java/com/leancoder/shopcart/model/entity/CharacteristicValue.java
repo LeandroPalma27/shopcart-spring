@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+// Entidad para los ejemplos de cada tipo de caracteristica.
+// Sus campos serian el id, el nombre del ejemplo(ROJO, RGB, SI, NO, HIBRIDO), y la descripcion de estos ejemplos(SI - tiene bluetooh, NO - no tiene bluetooh)
 @Table(name = "characteristicValues")
 @Entity
 public class CharacteristicValue {

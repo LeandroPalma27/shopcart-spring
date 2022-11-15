@@ -1,18 +1,11 @@
 package com.leancoder.shopcart.controller;
 
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,14 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.leancoder.shopcart.model.dao.ICategoryDao;
 import com.leancoder.shopcart.model.dao.IProductTypeDao;
 import com.leancoder.shopcart.model.dao.IProductoDao;
 import com.leancoder.shopcart.model.dao.ISubCategoryDao;
 import com.leancoder.shopcart.model.dao.ProductoEntityManager;
-import com.leancoder.shopcart.model.entity.CharacteristicValue;
-import com.leancoder.shopcart.model.entity.Product;
 
 // CONTROLADOR PARA EL MANEJO DE PRODUCTOS DE LA TIENDA:
 /*  

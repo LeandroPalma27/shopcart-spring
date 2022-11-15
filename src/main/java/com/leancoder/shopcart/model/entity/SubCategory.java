@@ -12,9 +12,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
+// Entidad para las subcategorias
+
+/*
+ * Sera el segundo nivel de cada producto.
+ * Esta entidad tiene una relacion de muchos a uno con la entidad "categoria".
+ * Esta entidad tiene una relacion de uno a muchos con la entidad "productTypes(TIPO DE PRODUCTO)".
+ * Solo tendra como campos el id, nombre de la subcategoria y el id de la categoria.
+*/
 @Table(name = "subcategory")
 @Entity
 public class SubCategory {
@@ -23,8 +30,7 @@ public class SubCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Min(value = 2)
-    @Max(value = 80)
+    @Size(min = 2, max = 80)
     @Column(unique = true)
     private String name;
 

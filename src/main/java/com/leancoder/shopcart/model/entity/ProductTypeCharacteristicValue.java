@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+// Entidad para la tabla intermedia de la relacion identificada de los tipos de productos o los ejemplos de caracteristicas.
 @Table(name = "productTypeCharacteristicValues")
 @Entity
 public class ProductTypeCharacteristicValue {

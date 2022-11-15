@@ -10,9 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
+// Entidad para las categorias
+
+/*
+ * Sera el primer nivel de cada producto.
+ * Esta entidad tiene una relacion de uno a muchos con la entidad "subcategoria".
+ * Solo tendra como campos el id y nombre de la categoria.
+*/
 @Table(name = "category")
 @Entity
 public class Category {
@@ -21,8 +27,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Min(value = 2)
-    @Max(value = 80)
+    @Size(min = 2, max = 3)
     @Column(unique = true)
     private String name;
 
